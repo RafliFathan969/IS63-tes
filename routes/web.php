@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MahasiswaController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('dashboard');
 });
 
 Route::get('/contoh1', function () {
@@ -16,4 +16,5 @@ Route::get('/master', function () {
 });
 
 Route::get('/mahasiswa', [MahasiswaController::class, 'index']);
-Route::get('/mahasiswa', [MahasiswaController::class, 'create']);
+Route::get('/mahasiswa/tambah', [MahasiswaController::class, 'create']);
+Route::post('/mahasiswa', [MahasiswaController::class, 'store']);

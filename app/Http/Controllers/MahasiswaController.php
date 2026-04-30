@@ -11,7 +11,7 @@ class MahasiswaController extends Controller
      */
     public function index()
     {
-        return view('mahasiswa.index');
+        return view ('mahasiswa.index');
     }
 
     /**
@@ -19,7 +19,8 @@ class MahasiswaController extends Controller
      */
     public function create()
     {
-        //
+        //disini hasil eksekusi dari klik tombol "Tambah Data" untuk menampilkan form tambah data mahasiswa
+        return view('mahasiswa.form');
     }
 
     /**
