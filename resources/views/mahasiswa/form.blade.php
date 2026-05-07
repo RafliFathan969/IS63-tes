@@ -13,7 +13,7 @@
             <h6 class="m-0 font-weight-bold text-primary">Form Tambah Mahasiswa</h6>
         </div>
         <div class="card-body">
-            <form method="POST" action="mahasiswa.store">
+            <form method="POST" action="/mahasiswa">
                 @csrf
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">NIM</label>
@@ -94,9 +94,12 @@
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Jenis Kelamin</label>
-                    <input type="jenis_kelamin" name="jenis_kelamin" class="form-control @error('jenis_kelamin') is-invalid @enderror"
-                    id="exampleInputEmail1" aria-describedby="emailHelp">
+                    <label for="exampleInputEmail1" class="form-label">Jenis kelamin</label>
+                    <select name="jenis_kelamin" class="form-control @error('jenis_kelamin') is-invalid @enderror" id="">
+                        <option value="">Pilih Jenis Kelamin</option>
+                        <option value="Laki-laki">Laki-laki</option>
+                        <option value="Perempuan">Perempuan</option>
+                    </select>
                     @error('jenis_kelamin')
                         <div class="alert">
                             {{ $message }}</div>
