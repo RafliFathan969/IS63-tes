@@ -13,7 +13,7 @@
             <h6 class="m-0 font-weight-bold text-primary">Form Tambah Mahasiswa</h6>
         </div>
         <div class="card-body">
-            <form method="POST" action="/mahasiswa">
+            <form method="POST" action="/mahasiswa/{{ $mahasiswa->id }}">
                 @csrf
                 @method('PUT')
                 <div class="mb-3">
@@ -79,9 +79,9 @@
 
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">No Handphone</label>
-                    <input type="text" value="{{ $mahasiswa->nohp }}" name="no_handphone" class="form-control @error('no_handphone') is-invalid @enderror"
+                    <input type="text" value="{{ $mahasiswa->nohp }}" name="nohp" class="form-control @error('nohp') is-invalid @enderror"
                         id="exampleInputEmail1" aria-describedby="emailHelp">
-                    @error('no_handphone')
+                    @error('nohp')
                         <div class="alert">
                             {{ $message }}
                         </div>

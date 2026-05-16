@@ -12,8 +12,8 @@ class MahasiswaController extends Controller
      */
     public function index()
     {
-        $mahasiswas = Mahasiswa::all();
-        return view ('mahasiswa.index', compact('mahasiswas'));
+        $mahasiswa = Mahasiswa::all();
+        return view ('mahasiswa.index', compact('mahasiswa'));
     }
 
     /**
@@ -57,7 +57,7 @@ class MahasiswaController extends Controller
             'tahun_masuk' => $request->tahun_masuk,
         ]);
 
-        return view('mahasiswa.index')->with(['success' => 'Data mahasiswa berhasil ditambahkan.']);
+        return redirect('/mahasiswa')->with(['success' => 'Data mahasiswa berhasil ditambahkan.']);
         // return redirect()->route('mahasiswa.index')->with('success', 'Data mahasiswa berhasil disimpan.');
     }
 
@@ -113,7 +113,7 @@ class MahasiswaController extends Controller
             'tahun_masuk' => $request->tahun_masuk,
         ]);
 
-        return redirect()->route('mahasiswa.index')->with(['success' => 'Data mahasiswa berhasil diperbarui.']);
+        return redirect()->route('/mahasiswa')->with(['success' => 'Data mahasiswa berhasil diperbarui.']);
     }
 
     /**
@@ -121,6 +121,8 @@ class MahasiswaController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $mahasiswa = Mahasiswa::find($id);
+        $mahasiswa->delete();
+        return redirect()->route('/mahasiswa')->with(['success' => 'Data mahasiswa berhasil dihapus.']);
     }
 }

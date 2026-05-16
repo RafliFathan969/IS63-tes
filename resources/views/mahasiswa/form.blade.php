@@ -21,7 +21,8 @@
                     id="exampleInputEmail1" aria-describedby="emailHelp">
                     @error('nim')
                         <div class="alert">
-                            {{ $message }}</div>
+                            {{ $message }}
+                        </div>
                     @enderror
                 </div>
                 <div class="mb-3">
@@ -30,7 +31,8 @@
                     id="exampleInputEmail1" aria-describedby="emailHelp">
                     @error('nama')
                         <div class="alert">
-                            {{ $message }}</div>
+                            {{ $message }}
+                        </div>
                     @enderror
                 </div>
                 <div class="mb-3">
@@ -45,7 +47,8 @@
                     </select>
                     @error('jurusan')
                         <div class="alert">
-                            {{ $message }}</div>
+                            {{ $message }}
+                        </div>
                     @enderror
                 </div>
                 <div class="mb-3">
@@ -54,7 +57,8 @@
                     id="exampleInputEmail1" aria-describedby="emailHelp">
                     @error('tempat_lahir')
                         <div class="alert">
-                            {{ $message }}</div>
+                            {{ $message }}
+                        </div>
                     @enderror
                 </div>
                 <div class="mb-3">
@@ -63,7 +67,8 @@
                     id="exampleInputEmail1" aria-describedby="emailHelp">
                     @error('tanggal_lahir')
                         <div class="alert">
-                            {{ $message }}</div>
+                            {{ $message }}
+                        </div>
                     @enderror
                 </div>
                 <div class="mb-3">
@@ -72,7 +77,8 @@
                     id="exampleInputEmail1" aria-describedby="emailHelp">
                     @error('nohp')
                         <div class="alert">
-                            {{ $message }}</div>
+                            {{ $message }}
+                        </div>
                     @enderror
                 </div>
                 <div class="mb-3">
@@ -81,7 +87,8 @@
                     id="exampleInputEmail1" aria-describedby="emailHelp">
                     @error('domisili')
                         <div class="alert">
-                            {{ $message }}</div>
+                            {{ $message }}
+                        </div>
                     @enderror
                 </div>
                 <div class="mb-3">
@@ -90,7 +97,8 @@
                     id="exampleInputEmail1" aria-describedby="emailHelp">
                     @error('email')
                         <div class="alert">
-                            {{ $message }}</div>
+                            {{ $message }}
+                        </div>
                     @enderror
                 </div>
                 <div class="mb-3">
@@ -102,16 +110,18 @@
                     </select>
                     @error('jenis_kelamin')
                         <div class="alert">
-                            {{ $message }}</div>
+                            {{ $message }}
+                        </div>
                     @enderror
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Tahun Masuk</label>
-                    <input type="tahun_masuk" name="tahun_masuk" class="form-control @error('tahun_masuk') is-invalid @enderror"
+                    <input type="number" name="tahun_masuk" class="form-control @error('tahun_masuk') is-invalid @enderror"
                     id="exampleInputEmail1" aria-describedby="emailHelp">
                     @error('tahun_masuk')
                         <div class="alert">
-                            {{ $message }}</div>
+                            {{ $message }}
+                        </div>
                     @enderror
                 </div>
 

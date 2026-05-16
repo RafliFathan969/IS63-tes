@@ -1,16 +1,16 @@
 @extends('layout.master')
 @section('title')
-    Data Mahasiswa
+    Data Jurusan
 @endsection
 
 @section('judul')
-    Data Mahasiswa
+    Data Jurusan
 @endsection
 
 @section('konten')
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary"><a href="/mahasiswa/tambah" class="btn btn-outline-primary">Tambah Data</a></h6>
+            <h6 class="m-0 font-weight-bold text-primary"><a href="/jurusan/tambah" class="btn btn-outline-primary">Tambah Data</a></h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -18,26 +18,21 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>NIM</th>
-                            <th>Nama</th>
-                            <th>Jurusan</th>
-                            <th>Tempat,Tanggal Lahir</th>
-                            <th>Aksi</th>
+                            <th>Kode Jurusan</th>
+                            <th>Nama Jurusan</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($mahasiswa as $x)
+                        @forelse ($jurusan as $x)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $x->nim }}</td>
-                                <td>{{ $x->nama }}</td>
-                                <td>{{ $x->jurusan }}</td>
-                                <td>{{ $x->tempat_lahir }}, {{ $x->tanggal_lahir }}</td>
+                                <td>{{ $x->kode_jurusan }}</td>
+                                <td>{{ $x->nama_jurusan }}</td>
                                 <td>
-                                    <a href="/mahasiswa/edit/{{ $x->id }}"
+                                    <a href="/jurusan/edit/{{ $x->id }}"
                                         class="btn btn-sm btn-outline-warning">Edit</a>
 
-                                    <form onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')" action="/mahasiswa/{{ $x->id }}" method="post">
+                                    <form onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')" action="/jurusan/{{ $x->id }}" method="post">
                                         @csrf
                                         @method('DELETE')
                                         <button class="btn btn-outline-danger" type="submit">Hapus</button>
@@ -47,7 +42,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center">Tidak ada data mahasiswa.</td>
+                                <td colspan="6" class="text-center">Tidak ada data jurusan.</td>
                             </tr>
                         @endforelse
                     </tbody>

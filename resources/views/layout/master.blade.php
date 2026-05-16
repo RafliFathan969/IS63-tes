@@ -65,7 +65,7 @@
 
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="/mahasiswa">
+                <a class="nav-link" href="/jurusan">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Data Jurusan</span></a>
             </li>
