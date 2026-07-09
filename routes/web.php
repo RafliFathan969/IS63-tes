@@ -31,3 +31,5 @@ Route::middleware('auth')->group(function () {
     Route::resource('nilai', NilaiController::class);
 
     });
+
+    
