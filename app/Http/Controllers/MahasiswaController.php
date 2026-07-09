@@ -2,127 +2,148 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Mahasiswa;
+use App\Models\Prodi;
+use Illuminate\Http\Request;
+use App\Http\Requests\StoreMahasiswaRequest;
+use App\Http\Requests\UpdateMahasiswaRequest;
+use Illuminate\Support\Facades\Storage;
 
 class MahasiswaController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * index() — Daftar mahasiswa dengan filter dan pencarian
+     * GET /mahasiswa
      */
-    public function index()
+    public function index(Request $request)
     {
-        $mahasiswa = Mahasiswa::all();
-        return view ('mahasiswa.index', compact('mahasiswa'));
+        $query = Mahasiswa::with('prodi');
+
+        // Filter pencarian nama atau NIM
+        if ($request->filled('search')) {
+            $query->cari($request->search);   // menggunakan scope dari Bab 4
+        }
+
+        // Filter status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Filter prodi
+        if ($request->filled('prodi_id')) {
+            $query->where('prodi_id', $request->prodi_id);
+        }
+
+        // Filter angkatan
+        if ($request->filled('angkatan')) {
+            $query->where('angkatan', $request->angkatan);
+        }
+
+        $mahasiswas = $query->orderBy('nama')->paginate(10)->withQueryString();
+        $prodis = Prodi::orderBy('nama_prodi')->get();
+
+        return view('mahasiswa.index', compact('mahasiswas', 'prodis'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * create() — Form tambah mahasiswa
+     * GET /mahasiswa/create
      */
     public function create()
     {
-        //disini hasil eksekusi dari klik tombol "Tambah Data" untuk menampilkan form tambah data mahasiswa
-        return view('mahasiswa.form');
+        $prodis = Prodi::where('status', 'aktif')->orderBy('nama_prodi')->get();
+        return view('mahasiswa.create', compact('prodis'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * store() — Simpan mahasiswa baru
+     * POST /mahasiswa
      */
-    public function store(Request $request)
+    public function store(StoreMahasiswaRequest $request)
     {
-        //
-        $request->validate([
-            'nim' => 'required|unique:mahasiswas,nim',
-            'nama' => 'required|max:100',
-            'jurusan' => 'required',
-            'tempat_lahir' => 'required',
-            'tanggal_lahir' => 'required|date',
-            'nohp' => 'required|unique:mahasiswas,nohp|max:20',
-            'domisili' => 'required',
-            'email' => 'required|email|unique:mahasiswas,email',
-            'jenis_kelamin' => 'required',
-            'tahun_masuk' => 'required|integer',
+        $data = $request->validated();
+
+        // Handle upload foto jika ada
+        if ($request->hasFile('foto')) {
+            $data['foto'] = $request->file('foto')
+                ->store('foto-mahasiswa', 'public');
+        }
+
+        Mahasiswa::create($data);
+
+        return redirect()
+            ->route('mahasiswa.index')
+            ->with('success', 'Data mahasiswa berhasil ditambahkan!');
+    }
+
+    /**
+     * show() — Detail mahasiswa beserta nilai-nilainya
+     * GET /mahasiswa/{mahasiswa}
+     */
+    public function show(Mahasiswa $mahasiswa)
+    {
+        // Eager load relasi yang dibutuhkan di halaman detail
+        $mahasiswa->load([
+            'prodi',
+            'nilais' => function ($q) {
+                $q->orderBy('tahun_akademik', 'desc')->orderBy('semester');
+            }
         ]);
 
-        $mahasiswa =  Mahasiswa::create([
-            'nim' => $request->nim,
-            'nama' => $request->nama,
-            'jurusan' => $request->jurusan,
-            'tempat_lahir' => $request->tempat_lahir,
-            'tanggal_lahir' => $request->tanggal_lahir,
-            'nohp' => $request->nohp,
-            'domisili' => $request->domisili,
-            'email' => $request->email,
-            'jenis_kelamin' => $request->jenis_kelamin,
-            'tahun_masuk' => $request->tahun_masuk,
-        ]);
-
-        return redirect('/mahasiswa')->with(['success' => 'Data mahasiswa berhasil ditambahkan.']);
-        // return redirect()->route('mahasiswa.index')->with('success', 'Data mahasiswa berhasil disimpan.');
+        return view('mahasiswa.show', compact('mahasiswa'));
     }
 
     /**
-     * Display the specified resource.
+     * edit() — Form edit mahasiswa
+     * GET /mahasiswa/{mahasiswa}/edit
      */
-    public function show(string $id)
+    public function edit(Mahasiswa $mahasiswa)
     {
-        //
+        $prodis = Prodi::where('status', 'aktif')->orderBy('nama_prodi')->get();
+        return view('mahasiswa.edit', compact('mahasiswa', 'prodis'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * update() — Perbarui data mahasiswa
+     * PUT /mahasiswa/{mahasiswa}
      */
-    public function edit(string $id)
+    public function update(UpdateMahasiswaRequest $request, Mahasiswa $mahasiswa)
     {
-        //
-        $mahasiswa = Mahasiswa::find($id);
-        return view('mahasiswa.edit', compact('mahasiswa'));
+        $data = $request->validated();
+
+        // Handle upload foto baru
+        if ($request->hasFile('foto')) {
+            // Hapus foto lama jika ada
+            if ($mahasiswa->foto) {
+                Storage::disk('public')->delete($mahasiswa->foto);
+            }
+            $data['foto'] = $request->file('foto')
+                ->store('foto-mahasiswa', 'public');
+        }
+
+        $mahasiswa->update($data);
+
+        return redirect()
+            ->route('mahasiswa.index')
+            ->with('success', 'Data mahasiswa berhasil diperbarui!');
     }
 
     /**
-     * Update the specified resource in storage.
+     * destroy() — Hapus data mahasiswa
+     * DELETE /mahasiswa/{mahasiswa}
      */
-    public function update(Request $request, string $id)
+    public function destroy(Mahasiswa $mahasiswa)
     {
-        //
-        $request->validate([
-            'nim' => 'required|unique:mahasiswas,nim,' . $id,
-            'nama' => 'required|max:100',
-            'jurusan' => 'required',
-            'tempat_lahir' => 'required',
-            'tanggal_lahir' => 'required|date',
-            'nohp' => 'required|unique:mahasiswas,nohp,' . $id . '|max:20',
-            'domisili' => 'required',
-            'email' => 'required|email|unique:mahasiswas,email,' . $id,
-            'jenis_kelamin' => 'required',
-            'tahun_masuk' => 'required|integer',
-        ]);
+        // Hapus foto dari storage jika ada
+        if ($mahasiswa->foto) {
+            Storage::disk('public')->delete($mahasiswa->foto);
+        }
 
-
-        $mahasiswa = Mahasiswa::find($id);
-        $mahasiswa->update([
-            'nim' => $request->nim,
-            'nama' => $request->nama,
-            'jurusan' => $request->jurusan,
-            'tempat_lahir' => $request->tempat_lahir,
-            'tanggal_lahir' => $request->tanggal_lahir,
-            'nohp' => $request->nohp,
-            'domisili' => $request->domisili,
-            'email' => $request->email,
-            'jenis_kelamin' => $request->jenis_kelamin,
-            'tahun_masuk' => $request->tahun_masuk,
-        ]);
-
-        return redirect()->route('/mahasiswa')->with(['success' => 'Data mahasiswa berhasil diperbarui.']);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        $mahasiswa = Mahasiswa::find($id);
+        // Data nilai akan ikut terhapus (cascade di migration)
         $mahasiswa->delete();
-        return redirect()->route('/mahasiswa')->with(['success' => 'Data mahasiswa berhasil dihapus.']);
+
+        return redirect()
+            ->route('mahasiswa.index')
+            ->with('success', 'Data mahasiswa berhasil dihapus!');
     }
 }

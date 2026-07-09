@@ -1,31 +1,33 @@
 <?php
+// routes/web.php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\MahasiswaController;
-use App\Http\Controllers\JurusanController;
+use App\Http\Controllers\NilaiController;
 
-Route::get('/', function () {
-    return view('dashboard');
+Route::middleware('guest')->group(function () {
+    Route::get('/login',  [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
 });
 
-Route::get('/contoh1', function () {
-    return view('lp3i');
-});
+Route::middleware('auth')->group(function () {
 
-// Route::get('/master', function () {
-//     return view('layout.master');
-// });
+    // Logout
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/mahasiswa', [MahasiswaController::class, 'index']);
-Route::get('/mahasiswa/tambah', [MahasiswaController::class, 'create']);
-Route::post('/mahasiswa', [MahasiswaController::class, 'store']);
-Route::get('/mahasiswa/edit/{id}', [MahasiswaController::class, 'edit']);
-Route::put('/mahasiswa/{id}', [MahasiswaController::class, 'update']);
-Route::delete('/mahasiswa/{id}', [MahasiswaController::class, 'destroy']);
+    // Dashboard
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::get('/jurusan', [JurusanController::class, 'index']);
-Route::get('/jurusan/tambah', [JurusanController::class, 'create']);
-Route::post('/jurusan', [JurusanController::class, 'store']);
-Route::get('/jurusan/edit/{id}', [JurusanController::class, 'edit']);
-Route::put('/jurusan/{id}', [JurusanController::class, 'update']);
-Route::delete('/jurusan/{id}', [JurusanController::class, 'destroy']);
+    // Modul Program Studi — 7 route: prodi.index s/d prodi.destroy
+    Route::resource('prodi', ProdiController::class);
+
+    // Modul Mahasiswa — 7 route: mahasiswa.index s/d mahasiswa.destroy
+    Route::resource('mahasiswa', MahasiswaController::class);
+
+    // Modul Nilai — 7 route: nilai.index s/d nilai.destroy
+    Route::resource('nilai', NilaiController::class);
+
+    });
