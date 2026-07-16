@@ -18,7 +18,7 @@
                                 Total Program Studi
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                {{-- {{ $totalProdi }} --}}0
+                                {{ $totalProdi }}
                             </div>
                         </div>
                         <div class="col-auto">
@@ -39,7 +39,7 @@
                                 Total Mahasiswa
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                {{-- {{ $totalMahasiswa }} --}}0
+                                {{ $totalMahasiswa }}
                             </div>
                         </div>
                         <div class="col-auto">
@@ -60,7 +60,7 @@
                                 Total Data Nilai
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                {{-- {{ $totalNilai }} --}}0
+                                {{ $totalNilai }}
                             </div>
                         </div>
                         <div class="col-auto">
@@ -79,12 +79,12 @@
             <h6 class="m-0 font-weight-bold text-primary">
                 <i class="fas fa-users mr-2"></i>Mahasiswa Terbaru
             </h6>
-            {{-- <a href="{{ route('mahasiswa.index') }}" class="btn btn-sm btn-primary">
-                Lihat Semua
-            </a> --}}
-            <a href="#" class="btn btn-sm btn-primary">
+            <a href="{{ route('mahasiswa.index') }}" class="btn btn-sm btn-primary">
                 Lihat Semua
             </a>
+            {{-- <a href="#" class="btn btn-sm btn-primary">
+                Lihat Semua
+            </a> --}}
         </div>
         <div class="card-body">
             <div class="table-responsive">
